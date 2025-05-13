@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Google OAuth Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+    }
+    #user-info {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Google OAuth Test</h1>
+
+  <button id="login">Login with Google</button>
+  <button id="get-profile">Get Profile</button>
+  <button id="logout">Logout</button>
+
+  <div id="user-info"></div>
+
+  <script>
+    const BACKEND_URL = "http://localhost:8080/api/v1/user";
+
+    document.getElementById("login").onclick = async () => {
+      // window.location.href = `${BACKEND_URL}/auth/google`;
+      
+        window.location.href = (`${BACKEND_URL}/auth/google`);
+    };
+
+    document.getElementById("get-profile").onclick = async () => {
+      try {
+        const res = await fetch(`${BACKEND_URL}/profile`, {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (res.ok) { 
+          document.getElementById("user-info").innerHTML = `
+            <h3>User Info</h3>
+            <p><strong>Name:</strong> ${data.user.name}</p>
+            <p><strong>Email:</strong> ${data.user.email}</p>
+            <p><strong>ID:</strong> ${data.user.id}</p>
+          `;
+        } else {
+          document.getElementById("user-info").innerText = data.message || "Failed to get profile";
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById("user-info").innerText = "Error fetching profile";
+      }
+    };
+
+    document.getElementById("logout").onclick = async () => {
+      try {
+        const res = await fetch(`${BACKEND_URL}/logout`, {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await res.json();
+        document.getElementById("user-info").innerText = data.message || "Logged out";
+      } catch (err) {
+        console.error(err);
+        document.getElementById("user-info").innerText = "Error logging out";
+      }
+    };
+  </script>
+</body>
+</html>
