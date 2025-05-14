@@ -11,7 +11,7 @@ const app = express();
 app.use(cors({
   origin: ["http://127.0.0.1:5500/index.html", "http://localhost:5500/index.html",  "https://mastering-auth.vercel.app/"],
 
-  credentials: true,.
+  credentials: true,
   methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
